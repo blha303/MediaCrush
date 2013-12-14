@@ -173,7 +173,7 @@ function updateVideo(e) {
 function video_controlClick(e) {
     e.preventDefault();
     var target = e.target;
-    if (!target.className)
+    if (!target.className || target.className == 'large')
         target = target.parentElement;
     var video = document.getElementById(target.getAttribute('data-video'));
     if (target.className.indexOf('play') != -1) {
@@ -182,6 +182,17 @@ function video_controlClick(e) {
             target.classList.add('hidden');
     } else if (target.className.indexOf('pause') != -1) {
         video_pause(video);
+    } else if (target.className.indexOf('subtitles') != -1) {
+        var enabled = target.className.indexOf('enabled') != -1;
+        enabled = !enabled;
+        video.parentElement.querySelector('#libjass-subs').style.display = enabled ? 'block' : 'none';
+        if (!enabled) {
+            target.classList.remove('enabled');
+            target.innerHTML = 'Subtitles<br/><span class="large">OFF</span>';
+        } else {
+            target.classList.add('enabled');
+            target.innerHTML = 'Subtitles<br/><span class="large">ON</span>';
+        }
     } else if (target.className.indexOf('loop') != -1) {
         video.loop = !video.loop;
         if (video.ended) {

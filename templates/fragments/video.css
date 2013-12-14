@@ -131,6 +131,27 @@
     box-shadow: 0 0 5px 5px #fff;
     color: #fff;
 }
+.video .side .subtitles {
+    display: block;
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    color: #888;
+    opacity: 0.8;
+    border-radius: 10px;
+    text-decoration: none;
+    background: #333;
+    transition: box-shadow 0.3s linear;
+    font-size: 10pt;
+    margin-top: 10px;
+}
+.video .side .subtitles.enabled {
+    box-shadow: 0 0 5px 5px #fff;
+    color: #fff;
+}
+.video .side .subtitles .large {
+    font-size: 18pt;
+}
 .video .control {
     width: 32px;
     height: 32px;
