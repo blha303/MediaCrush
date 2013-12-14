@@ -11,6 +11,7 @@ window.addEventListener('load', function() {
     }
     var videos = document.querySelectorAll('video');
     for (var i = 0; i < videos.length; i++) {
+        initializeSubs(videos[i]);
         videos[i].addEventListener('ended', function(e) {
             if (!e.target.loop) {
                 video_pause(e.target);
@@ -278,4 +279,35 @@ function mediaSizeReporter() {
 }
 function resizeMedia(x, y) {
     document.querySelector('.video').classList.add('fullscreen');
+}
+function initializeSubs(video) {
+    var ass = null;
+    if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
+        video.addEventListener("loadedmetadata", function () {
+            handleSubsReady(video, ass);
+        }, false);
+    }
+    else {
+        handleSubsReady(video, ass);
+    }
+    var track = video.querySelector("track[data-format='ass']");
+    var subsRequest = new XMLHttpRequest();
+    subsRequest.open("GET", track.src || track.getAttribute("src"), true);
+    subsRequest.onload = function() {
+        ass = new libjass.ASS(subsRequest.responseText);
+        handleSubsReady(video, ass);
+    };
+    subsRequest.send();
+}
+function handleSubsReady(video, ass) {
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA && ass) {
+        var width = video.offsetWidth;
+        var height = video.offsetHeight;
+        ass.dpi = 96;
+        var renderer = new libjass.renderers.DefaultRenderer(video, ass, {
+            preLoadFonts: true,
+            fontMap: libjass.renderers.DefaultRenderer.makeFontMapFromStyleElement(document.querySelector("#font-map-" + video.getAttribute('data-media')))
+        });
+        renderer.resizeVideo(width, height);
+    }
 }

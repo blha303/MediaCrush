@@ -1,5 +1,8 @@
+<link rel="stylesheet" type="text/css" href="/{{filename}}_fonts.css" id="font-map-{{filename}}" />
+<link rel="stylesheet" type="text/css" href="/static/subtitles.css" id="font-map-{{filename}}" />
+
 <div class="video" data-video="video-{{ filename }}">
-    <video poster="/{{ filename }}.png" id="video-{{ filename }}" {% if autoplay and not mobile %}autoplay {% endif %}{% if loop %}loop {% endif %}>
+    <video poster="/{{ filename }}.png" id="video-{{ filename }}" data-media="{{filename}}" {% if autoplay and not mobile %}autoplay {% endif %}{% if loop %}loop {% endif %}>
         {% if 'video/mp4' in types %}
         <source src="/{{ filename }}.mp4" type='video/mp4;'>
         {% endif %}
@@ -9,6 +12,7 @@
         {% if 'video/ogg' in types %}
         <source src="/{{ filename }}.ogv" type='video/ogg'>
         {% endif %}
+        <track src="/{{filename}}.ass" kind="metadata" data-format="ass" />
         <p>Looks like you should visit our <a href="/troubleshooting">troubleshooting</a> page.</p>
     </video>
     <div class="hover">
