@@ -18,7 +18,7 @@ class Processor(object):
         
         self.f = f
 
-    def _execute(self, command, important=True):
+    def _execute(self, command, important=True, ignoreNonZero=False):
         ext = extension(self.f.original)
 
         tlc = Invocation(command)(self.path, self.output, extension=ext)
@@ -27,8 +27,10 @@ class Processor(object):
         if tlc.exited and important:
             raise TimeoutException
 
-        if tlc.returncode != 0 and important:
+        if tlc.returncode != 0 and important and not ignoreNonZero:
             raise ProcessingException
+
+        return tlc
 
     def sync(self):
         pass

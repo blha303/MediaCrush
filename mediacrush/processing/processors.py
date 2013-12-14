@@ -25,6 +25,25 @@ class VideoProcessor(Processor):
         if self.extra['has_audio']:
             map_string += ' -map 0:a:0'
         self._execute("ffmpeg -y -i {0} -q 5 -pix_fmt yuv420p -acodec libvorbis -vcodec libtheora" + map_string + " {1}.ogv")
+        # Extract extra streams if present
+        if self.extra['has_fonts'] or stream.extra['has_subtitles']:
+            for stream in self.extra['streams']:
+                if stream['type'] == 'font':
+                    # Note that ffmpeg returns a nonzero exit code when dumping attachments because there's technically no output file
+                    # -dump_attachment is a mechanism completely removed from the rest of the ffmpeg workflow
+                    self._execute("ffmpeg -y -dump_attachment:t:0:" + str(stream["index"]) + ' {1}_attachment_' + stream["extra"] + ' -i {0}', ignoreNonZero=True)
+                elif stream['type'] == 'subtitle':
+                    print('dumping subs')
+                    print(stream)
+                    extension = None
+                    if stream['extra']['codec_name'] == 'ssa':
+                        extension = '.ass'
+                    elif stream['extra']['codec_name'] == 'srt':
+                        extension = '.srt'
+                    elif stream['extra']['codec_name'] == 'vtt':
+                        extension = '.vtt'
+                    if extension != None:
+                        self._execute("ffmpeg -y -i {0} -map 0:s:0 {1}" + extension)
 
 class AudioProcessor(Processor):
     time = 300

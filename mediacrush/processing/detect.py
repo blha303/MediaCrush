@@ -103,20 +103,21 @@ def detect_stream(stream):
         if "tags" in stream and "mimetype" in stream["tags"]:
             if stream["tags"]["mimetype"] == 'application/x-truetype-font':
                 return 'font', stream["tags"]["filename"]
-    if stream["codec_name"] == 'mjpeg':
-        return 'image/jpeg', None
-    if stream["codec_name"] == 'png':
-        return 'image/png', None
-    if stream["codec_name"] == 'bmp':
-        return None, None
-    if stream["codec_name"] == 'gif':
-        return 'video', { 'has_audio': False, 'has_video': True }
+    else:
+        if stream["codec_name"] == 'mjpeg':
+            return 'image/jpeg', None
+        if stream["codec_name"] == 'png':
+            return 'image/png', None
+        if stream["codec_name"] == 'bmp':
+            return None, None
+        if stream["codec_name"] == 'gif':
+            return 'video', { 'has_audio': False, 'has_video': True }
     if stream["codec_type"] == 'video':
         return 'video', { 'has_audio': False, 'has_video': True }
     if stream["codec_type"] == 'audio':
         return 'audio', { 'has_audio': True, 'has_video': False }
     if stream["codec_type"] == 'subtitle':
-        return 'subtitle', None
+        return 'subtitle', { 'codec_name': stream['codec_name'] }
     return None, None
 
 def detect_imagemagick(path):
