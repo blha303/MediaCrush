@@ -6,7 +6,7 @@ import os
 copy = "cp {0} {1}.{extension}"
 
 class VideoProcessor(Processor):
-    time = 600
+    time = 6000
     outputs = ['mp4', 'webm', 'ogv']
     extras = ['png']
 
@@ -35,7 +35,7 @@ class VideoProcessor(Processor):
                 if stream['type'] == 'font':
                     # Note that ffmpeg returns a nonzero exit code when dumping attachments because there's technically no output file
                     # -dump_attachment is a mechanism completely removed from the rest of the ffmpeg workflow
-                    self._execute("ffmpeg -y -dump_attachment:t:0:" + str(stream["index"]) + ' {1}_attachment_' + stream["extra"] + ' -i {0}', ignoreNonZero=True)
+                    self._execute("ffmpeg -y -dump_attachment:" + str(stream["index"]) + ' {1}_attachment_' + stream["extra"] + ' -i {0}', ignoreNonZero=True)
                     fonts.append(stream)
                 elif stream['type'] == 'subtitle':
                     extension = None

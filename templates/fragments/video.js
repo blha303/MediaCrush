@@ -185,7 +185,7 @@ function video_controlClick(e) {
     } else if (target.className.indexOf('subtitles') != -1) {
         var enabled = target.className.indexOf('enabled') != -1;
         enabled = !enabled;
-        video.parentElement.querySelector('#libjass-subs').style.display = enabled ? 'block' : 'none';
+        video.parentElement.querySelector('.libjass-subs').style.display = enabled ? 'block' : 'none';
         if (!enabled) {
             target.classList.remove('enabled');
             target.innerHTML = 'Subtitles<br/><span class="large">OFF</span>';
