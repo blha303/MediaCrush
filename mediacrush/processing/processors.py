@@ -33,8 +33,6 @@ class VideoProcessor(Processor):
                     # -dump_attachment is a mechanism completely removed from the rest of the ffmpeg workflow
                     self._execute("ffmpeg -y -dump_attachment:t:0:" + str(stream["index"]) + ' {1}_attachment_' + stream["extra"] + ' -i {0}', ignoreNonZero=True)
                 elif stream['type'] == 'subtitle':
-                    print('dumping subs')
-                    print(stream)
                     extension = None
                     if stream['extra']['codec_name'] == 'ssa':
                         extension = '.ass'
