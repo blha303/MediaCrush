@@ -6,7 +6,7 @@ import os
 copy = "cp {0} {1}.{extension}"
 
 class VideoProcessor(Processor):
-    time = 6000
+    time = 600
     outputs = ['mp4', 'webm', 'ogv']
     extras = ['png']
 
