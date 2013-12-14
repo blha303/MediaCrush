@@ -59,6 +59,8 @@ def detect_ffprobe(path):
     font_streams = 0
     # We shouldn't penalize people for unknown streams, I just figured we could make a note of it
     unknown_streams = 0
+    stream_info = []
+    index = 0
 
     for stream in result["streams"]:
         s = detect_stream(stream)
@@ -66,6 +68,11 @@ def detect_ffprobe(path):
         if not s or not t:
             unknown_streams += 1
         else:
+            stream_info.append({
+                'type': t,
+                'extra': s[1],
+                'index': index
+            })
             if t.startswith('image'):
                 image_streams += 1
             elif t == 'video':
@@ -78,10 +85,11 @@ def detect_ffprobe(path):
                 font_streams += 1
             else:
                 unknown_streams += 1
+        index += 1
     if audio_streams == 1 and video_streams == 0:
-        return 'audio', { 'has_audio': True, 'has_video': False }
+        return 'audio', { 'has_audio': True, 'has_video': False, 'streams': stream_info }
     if video_streams > 0:
-        return 'video', { 'has_audio': audio_streams > 0, 'has_video': True }
+        return 'video', { 'has_audio': audio_streams > 0, 'has_video': True, 'has_subtitles': subtitle_streams > 0, 'has_fonts': font_streams > 0, 'streams': stream_info }
     return None
 
 def detect_stream(stream):
@@ -94,7 +102,7 @@ def detect_stream(stream):
     if not "codec_name" in stream:
         if "tags" in stream and "mimetype" in stream["tags"]:
             if stream["tags"]["mimetype"] == 'application/x-truetype-font':
-                return 'font', None
+                return 'font', stream["tags"]["filename"]
     if stream["codec_name"] == 'mjpeg':
         return 'image/jpeg', None
     if stream["codec_name"] == 'png':
@@ -107,6 +115,8 @@ def detect_stream(stream):
         return 'video', { 'has_audio': False, 'has_video': True }
     if stream["codec_type"] == 'audio':
         return 'audio', { 'has_audio': True, 'has_video': False }
+    if stream["codec_type"] == 'subtitle':
+        return 'subtitle', None
     return None, None
 
 def detect_imagemagick(path):

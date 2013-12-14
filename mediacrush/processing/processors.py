@@ -3,7 +3,7 @@ from mediacrush.processing.processor import Processor
 copy = "cp {0} {1}.{extension}"
 
 class VideoProcessor(Processor):
-    time = 300
+    time = 600
     outputs = ['mp4', 'webm', 'ogv']
     extras = ['png']
 
