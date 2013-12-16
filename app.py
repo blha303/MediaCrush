@@ -61,6 +61,7 @@ def compile_first():
 
 @app.before_request
 def compile_if_debug():
+    # If `autoreload` is set to false, it prevents static compilation even in debug mode.
     if app.debug and _cfg('autoreload') == 'True':
         prepare()
 
