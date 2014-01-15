@@ -80,25 +80,30 @@ window.addEventListener('load', ->
             feedback.innerHTML = "<p>" + result + "</p>"
         xhr.send(formData)
     , false) if feedbackSend
-    dialogYes = document.querySelector('.dialog .yes')
-    dialogNo = document.querySelector('.dialog .no')
+    dialogYes = document.querySelector('#confirmation-dialog .yes')
+    dialogNo = document.querySelector('#confirmation-dialog .no')
     dialogYes.addEventListener('click', (e) ->
         e.preventDefault()
         confirmCallback(true) if confirmCallback
         confirmCallback = null
-        document.querySelector('.dialog').classList.add('hidden')
+        document.querySelector('#confirmation-dialog').classList.add('hidden')
     , false)
     dialogNo.addEventListener('click', (e) ->
         e.preventDefault()
         confirmCallback(false) if confirmCallback
         confirmCallback = null
-        document.querySelector('.dialog').classList.add('hidden')
+        document.querySelector('#confirmation-dialog').classList.add('hidden')
+    , false)
+
+    document.getElementById('log-in').addEventListener('click', (e) ->
+        e.preventDefault()
+        document.querySelector('#log-in-dialog').classList.remove('hidden')
     , false)
 , false)
 
 confirm = (callback) ->
     confirmCallback = callback
-    document.querySelector('.dialog').classList.remove('hidden')
+    document.querySelector('#confirmation-dialog').classList.remove('hidden')
 window.confirm = confirm
 
 s4 = -> Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
