@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 sudo apt-get update -qq
 sudo apt-get install -qq imagemagick tidy libjpeg-progs optipng libmp3lame-dev nodejs \
   autoconf automake build-essential git libass-dev libgpac-dev \
